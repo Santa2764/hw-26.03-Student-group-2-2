@@ -1,7 +1,9 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Security.AccessControl;
 using System.Threading;
 
 namespace Compare
@@ -282,7 +284,7 @@ namespace Compare
         }
     }
 
-    public class Group    // класс Group
+    public class Group : IEnumerable  // класс Group
     {
         List<Student> students = new List<Student>();
         List<Aspirant> aspirants = new List<Aspirant>();
@@ -479,6 +481,61 @@ namespace Compare
                 }
             }
             set { students[i] = value as Student; }
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return new StudentEnumerator(students);
+        }
+    }
+
+    public class NameComparer : IComparer<Student>
+    {
+        public int Compare(Student left, Student right)
+        {
+            for (int i = 0; i < left.FirstName.Length; i++)
+            {
+                if (left.FirstName[i] > right.FirstName[i]) return 1;
+                else if (left.FirstName[i] < right.FirstName[i]) return -1;
+            }
+            return 0;
+        }
+    }
+    public class AgeComparer : IComparer<Student>
+    {
+        public int Compare(Student left, Student right)
+        {
+            if (left.Age < right.Age) return 1;
+            else if (left.Age > right.Age) return -1;
+            else return 0;
+        }
+    }
+    class StudentEnumerator : IEnumerator
+    {
+        public object Current
+        {
+            get;
+            private set;
+        }
+
+        private int step;
+        List<Student> students = new List<Student>();
+
+        public StudentEnumerator(List<Student> arr)
+        {
+            this.students = arr;
+        }
+
+        public bool MoveNext()
+        {
+            if (step >= students.Count) return false;
+            Current = students[step++];
+            return true;
+        }
+
+        public void Reset()
+        {
+            // TO DO: https://learn.microsoft.com/ru-ru/dotnet/api/system.collections.ienumerator.reset?view=net-7.0
         }
     }
 }
