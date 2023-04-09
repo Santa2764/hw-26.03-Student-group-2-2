@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 
 namespace Compare
 {
@@ -41,11 +42,23 @@ namespace Compare
 
 
 
-            Student [] students = new Student[5];
+            //Student [] students = new Student[5];
 
-            for (int i=0; i<5; i++) students[i] = new Student();
-            Array.Sort(students);
-            for (int i = 0; i < 5; i++) students[i].ShowStud();
+            //for (int i=0; i<5; i++) students[i] = new Student();
+            //Array.Sort(students, new NameComparer());
+            //for (int i = 0; i < 5; i++) students[i].ShowStud();
+
+
+
+            Group gr1 = new Group();
+
+            foreach (Student st in gr1)
+            {
+                st.ShowStud();
+            }
+
+            Console.WriteLine();
+
         }
     }
 }
